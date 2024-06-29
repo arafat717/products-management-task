@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { useParams } from "react-router-dom";
 import { Form, Input, Button, Select } from "antd";
@@ -17,11 +18,14 @@ const EditProduct: React.FC = () => {
   console.log(product);
   const { data: categories } = productsApi.useGetCategoriesQuery();
 
-  const categoryOptions = categories?.map((item) => (
+  const arafatjion = categories?.map((item) => console.log(item));
+
+  const categoryOptions = categories?.map((item: any) => (
     <Option key={item.name} value={item.name}>
       {item.name}
     </Option>
   ));
+  console.log(arafatjion);
   const [updateProduct] = productsApi.useUpdateProductMutation();
 
   const [form] = Form.useForm();

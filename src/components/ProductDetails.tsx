@@ -3,6 +3,7 @@ import { Descriptions, Carousel, List, Rate } from "antd";
 import "./ProductDetail.css";
 import "./ProductDetail.css";
 import { productsApi } from "../redux/api/productsApi";
+import Loader from "./Loader";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -10,7 +11,7 @@ const ProductDetail = () => {
     Number(id)
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader></Loader>;
   if (error) return <div>Error loading product details</div>;
 
   return (
