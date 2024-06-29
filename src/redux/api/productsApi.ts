@@ -12,7 +12,7 @@ type GetProductRespose = {
   limit: number;
 };
 
-const productsApi = baseApi.injectEndpoints({
+export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query<
       GetProductRespose,
@@ -41,9 +41,9 @@ const productsApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetAllProductsQuery,
-  useGetCategoriesQuery,
-  useUpdateProductMutation,
-  useGetProductByIdQuery,
-} = productsApi;
+// export const {
+//   useGetAllProductsQuery,
+//   useGetCategoriesQuery,
+//   useUpdateProductMutation,
+//   useGetProductByIdQuery,
+// } = productsApi;

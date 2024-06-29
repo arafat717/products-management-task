@@ -5,37 +5,37 @@ import { TablePaginationConfig } from "antd/es/table";
 import type { TableProps } from "antd";
 import { Product } from "../types/products";
 import { useState } from "react";
-import { useGetAllProductsQuery } from "../redux/api/productsApi";
 import { Link } from "react-router-dom";
 import Loader from "./Loader";
+import { productsApi } from "../redux/api/productsApi";
 
 const ProductTableList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const { data, isLoading, error } = useGetAllProductsQuery({
+  const { data, isLoading, error } = productsApi.useGetAllProductsQuery({
     limit: pageSize,
     skip: (currentPage - 1) * pageSize,
   });
 
   const columns: TableProps<Product>["columns"] = [
     {
-      title: "title",
+      title: "Title",
       dataIndex: "title",
       key: "title",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "price",
+      title: "Price",
       dataIndex: "price",
       key: "price",
     },
     {
-      title: "category",
+      title: "Category",
       dataIndex: "category",
       key: "category",
     },
     {
-      title: "stock",
+      title: "Stock",
       key: "stock",
       dataIndex: "stock",
     },
@@ -44,7 +44,7 @@ const ProductTableList = () => {
       key: "action",
       render: (_, record) => (
         <Link to={`/products/${record?.id}`}>
-          <Button>View Details</Button>
+          <Button type="dashed">View Details</Button>
         </Link>
       ),
     },
@@ -53,7 +53,7 @@ const ProductTableList = () => {
       key: "action",
       render: (_, record) => (
         <Link to={`/products/edit/${record?.id}`}>
-          <Button>Edit Product</Button>
+          <Button type="dashed">Edit Product</Button>
         </Link>
       ),
     },
@@ -66,7 +66,7 @@ const ProductTableList = () => {
   if (isLoading) return <Loader></Loader>;
   if (error) return <div>Error loading product details</div>;
   return (
-    <div>
+    <div style={{ padding: "20px", textAlign: "center" }}>
       <h1>total Product: {data?.products?.length}</h1>
       <Table
         columns={columns}

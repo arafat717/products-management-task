@@ -1,13 +1,14 @@
-import React from "react";
-import { useParams, Link } from "react-router-dom";
-import { Descriptions, Button, Carousel, List, Rate } from "antd";
+import { useParams } from "react-router-dom";
+import { Descriptions, Carousel, List, Rate } from "antd";
 import "./ProductDetail.css";
-import { useGetProductByIdQuery } from "../redux/api/productsApi";
 import "./ProductDetail.css";
+import { productsApi } from "../redux/api/productsApi";
 
-const ProductDetail: React.FC = () => {
+const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, error, isLoading } = useGetProductByIdQuery(Number(id));
+  const { data, error, isLoading } = productsApi.useGetProductByIdQuery(
+    Number(id)
+  );
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading product details</div>;
@@ -23,6 +24,7 @@ const ProductDetail: React.FC = () => {
                   src={image}
                   alt={`Product Image ${index + 1}`}
                   className="carousel-image"
+                  style={{ width: "100%", height: "600px" }}
                 />
               </div>
             ))}
@@ -85,10 +87,6 @@ const ProductDetail: React.FC = () => {
           />
         </div>
       )}
-
-      <Link to={`/products/edit/${id}`}>
-        <Button>Edit Product</Button>
-      </Link>
     </div>
   );
 };

@@ -1,13 +1,10 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Form, Input, Button, Select } from "antd";
-import {
-  useGetCategoriesQuery,
-  useGetProductByIdQuery,
-  useUpdateProductMutation,
-} from "../redux/api/productsApi";
+
 import { Product } from "../types/products";
 import Loader from "./Loader";
+import { productsApi } from "../redux/api/productsApi";
 const { Option } = Select;
 
 const EditProduct: React.FC = () => {
@@ -16,16 +13,16 @@ const EditProduct: React.FC = () => {
     data: product,
     error,
     isLoading,
-  } = useGetProductByIdQuery(Number(id));
+  } = productsApi.useGetProductByIdQuery(Number(id));
   console.log(product);
-  const { data: categories } = useGetCategoriesQuery();
+  const { data: categories } = productsApi.useGetCategoriesQuery();
 
   const categoryOptions = categories?.map((item) => (
     <Option key={item.name} value={item.name}>
       {item.name}
     </Option>
   ));
-  const [updateProduct] = useUpdateProductMutation();
+  const [updateProduct] = productsApi.useUpdateProductMutation();
 
   const [form] = Form.useForm();
 
@@ -170,7 +167,7 @@ const EditProduct: React.FC = () => {
                   </Button>
                 </div>
               ))}
-              <Form.Item>
+              <Form.Item style={{ width: "400px" }}>
                 <Button type="dashed" onClick={() => add()} block>
                   Add Review
                 </Button>
@@ -178,22 +175,11 @@ const EditProduct: React.FC = () => {
             </>
           )}
         </Form.List>
-        <div
-          style={{
-            display: "flex",
-            gap: "5px",
-            justifyContent: "space-between",
-          }}
-        >
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Save
-            </Button>
-          </Form.Item>
-          <Link to="/products">
-            <Button type="primary">Back to Details Page</Button>
-          </Link>
-        </div>
+        <Form.Item style={{ textAlign: "center" }}>
+          <Button type="primary" block htmlType="submit">
+            Update
+          </Button>
+        </Form.Item>
       </Form>
     </div>
   );
