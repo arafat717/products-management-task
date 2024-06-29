@@ -19,10 +19,12 @@ const productsApi = baseApi.injectEndpoints({
       { limit: number; skip: number }
     >({
       query: ({ limit, skip }) => `products?limit=${limit}&skip=${skip}`,
+      providesTags: ["product"],
     }),
     getProductById: builder.query<GetProductByIdResponse, number>({
       query: (id) => `products/${id}`,
     }),
+
     updateProduct: builder.mutation<
       Product,
       Partial<Product> & Pick<Product, "id">

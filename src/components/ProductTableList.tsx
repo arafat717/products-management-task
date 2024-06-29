@@ -6,13 +6,13 @@ import type { TableProps } from "antd";
 import { Product } from "../types/products";
 import { useState } from "react";
 import { useGetAllProductsQuery } from "../redux/api/productsApi";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Loader from "./Loader";
 
 const ProductTableList = () => {
-  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const { data } = useGetAllProductsQuery({
+  const { data, isLoading, error } = useGetAllProductsQuery({
     limit: pageSize,
     skip: (currentPage - 1) * pageSize,
   });
@@ -43,21 +43,18 @@ const ProductTableList = () => {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Button type="link" onClick={() => navigate(`/products/${record?.id}`)}>
-          View Details
-        </Button>
+        <Link to={`/products/${record?.id}`}>
+          <Button>View Details</Button>
+        </Link>
       ),
     },
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Button
-          type="link"
-          onClick={() => navigate(`/products/${record?.id}/edit`)}
-        >
-          Edit Product
-        </Button>
+        <Link to={`/products/edit/${record?.id}`}>
+          <Button>Edit Product</Button>
+        </Link>
       ),
     },
   ];
@@ -66,8 +63,8 @@ const ProductTableList = () => {
     setCurrentPage(pagination.current || 1);
     setPageSize(pagination.pageSize || 10);
   };
-
-  console.log(data?.products);
+  if (isLoading) return <Loader></Loader>;
+  if (error) return <div>Error loading product details</div>;
   return (
     <div>
       <h1>total Product: {data?.products?.length}</h1>

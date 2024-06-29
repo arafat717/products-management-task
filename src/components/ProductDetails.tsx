@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Descriptions, Button, Carousel, List, Rate } from "antd";
 import "./ProductDetail.css";
 import { useGetProductByIdQuery } from "../redux/api/productsApi";
@@ -8,7 +8,6 @@ import "./ProductDetail.css";
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data, error, isLoading } = useGetProductByIdQuery(Number(id));
-  const navigate = useNavigate();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading product details</div>;
@@ -87,13 +86,9 @@ const ProductDetail: React.FC = () => {
         </div>
       )}
 
-      <Button
-        type="primary"
-        className="edit-button"
-        onClick={() => navigate(`/products/${id}/edit`)}
-      >
-        Edit Product
-      </Button>
+      <Link to={`/products/edit/${id}`}>
+        <Button>Edit Product</Button>
+      </Link>
     </div>
   );
 };

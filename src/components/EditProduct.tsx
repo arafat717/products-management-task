@@ -1,18 +1,22 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { Form, Input, Button, Select, Flex } from "antd";
+import { Link, useParams } from "react-router-dom";
+import { Form, Input, Button, Select } from "antd";
 import {
   useGetCategoriesQuery,
   useGetProductByIdQuery,
   useUpdateProductMutation,
 } from "../redux/api/productsApi";
 import { Product } from "../types/products";
-
+import Loader from "./Loader";
 const { Option } = Select;
 
 const EditProduct: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: product } = useGetProductByIdQuery(Number(id));
+  const {
+    data: product,
+    error,
+    isLoading,
+  } = useGetProductByIdQuery(Number(id));
   console.log(product);
   const { data: categories } = useGetCategoriesQuery();
 
@@ -25,11 +29,12 @@ const EditProduct: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const onFinish = async (values: Partial<Product>) => {
+  const handleUpdate = async (values: Partial<Product>) => {
     await updateProduct({ id: Number(id), ...values });
     console.log(values);
   };
-
+  if (isLoading) return <Loader></Loader>;
+  if (error) return <div>Error loading product details</div>;
   return (
     <div
       style={{
@@ -42,7 +47,7 @@ const EditProduct: React.FC = () => {
       <Form
         form={form}
         layout="vertical"
-        onFinish={onFinish}
+        onFinish={handleUpdate}
         initialValues={product}
       >
         <div
@@ -185,7 +190,9 @@ const EditProduct: React.FC = () => {
               Save
             </Button>
           </Form.Item>
-          <Button type="link">Back To Details Page</Button>
+          <Link to="/products">
+            <Button type="primary">Back to Details Page</Button>
+          </Link>
         </div>
       </Form>
     </div>
